@@ -1,0 +1,23 @@
+﻿<Window x:Class="Supermarket.Views.Administrator"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Supermarket.ViewModels"
+        mc:Ignorable="d"
+        Title="Administrator" Height="446" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >
+    <Window.DataContext>
+        <local:AdministratorVM/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Resources/adm.png"/>
+        </Grid.Background>
+       
+        <Button Content="Users" HorizontalAlignment="Center" Margin="0,111,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
+        <Button Content="Products" HorizontalAlignment="Center" Margin="0,163,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
+        <Button Content="Producers" HorizontalAlignment="Center" Margin="0,215,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
+        <Button Content="Stocks" HorizontalAlignment="Center" Margin="0,267,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
+        <Button Content="Receipts" HorizontalAlignment="Center" Margin="0,319,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
+    </Grid>
+</Window>
