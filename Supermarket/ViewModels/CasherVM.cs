@@ -1,5 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Supermarket.Helper;
+using Supermarket.Models;
+using Supermarket.Models.BusinessLogicLayer;
 using Supermarket.Views;
 using WpfMVVMAgendaEF.Helpers;
 
@@ -7,57 +10,91 @@ namespace Supermarket.ViewModels
 {
     internal class CasherVM : BasePropertyChanged
     {
-        public CasherVM() { }
+        private readonly ProductBLL _productBLL;
+        private readonly StockBLL _stockBLL;
+        private readonly CategoryBLL _categoryBLL;
+        private readonly ProducerBLL _producerBLL;
+        private ObservableCollection<Stock> _stocks;
+        private ObservableCollection<Product> _products;
+        private ObservableCollection<Category> _category;
+        private ObservableCollection<Producer> _producer;
 
-        private ICommand _searchCommand;
-        public ICommand SearchCommand
+        private ObservableCollection<Product> _productsToShow;
+        public ObservableCollection<Producer> Producer
         {
-            get
+            get => _producer;
+            set
             {
-                if (_searchCommand == null)
-                    _searchCommand = new RelayCommand(SearchWindow);
-                return _searchCommand;
+                _producer = value;
+
+            }
+        }
+        public ObservableCollection<Category> Category
+        {
+            get => _category;
+            set
+            {
+                _category = value;
+
+            }
+        }
+        public ObservableCollection<Product> Products
+        {
+            get => _products;
+            set
+            {
+                _products = value;
+
+            }
+        }
+        private ObservableCollection<Stock> Stocks
+        {
+            get => _stocks;
+            set
+            {
+                _stocks = value;
+            }
+        }
+        public ObservableCollection<Product> ProductsToShow
+        {
+            get => _productsToShow;
+            set
+            {
+                _productsToShow = value;
+                OnPropertyChanged(nameof(Products));
             }
         }
 
-        public void SearchWindow(object obj)
+        public CasherVM()
         {
-            // Deschiderea unei noi ferestre pentru căutare (creare)
-            
+            _productBLL = new ProductBLL();
+            _stockBLL = new StockBLL();
+            _categoryBLL=new CategoryBLL();
+            _producerBLL = new ProducerBLL();
+            LoadProducts();
+            LoadStocks();
+            LoadCategory();
+            LoadProducer();
         }
 
-        private ICommand _newReceiptCommand;
-        public ICommand NewReceiptCommand
+        private void LoadProducts()
         {
-            get
-            {
-                if (_newReceiptCommand == null)
-                    _newReceiptCommand = new RelayCommand(NewReceiptWindow);
-                return _newReceiptCommand;
-            }
+            Products = _productBLL.GetAllProducts();
+        }
+        private void LoadStocks()
+        {
+            Stocks = _stockBLL.GetStockProducts();
         }
 
-        public void NewReceiptWindow(object obj)
+        private void LoadCategory()
         {
-            // Deschiderea unei noi ferestre pentru NewReceipt (creare)
-            // Cod pentru deschiderea ferestrei NewReceipt
+            Category = _categoryBLL.GetCategory();
         }
 
-        private ICommand _seeReceiptCommand;
-        public ICommand SeeReceiptCommand
+        private void LoadProducer()
         {
-            get
-            {
-                if (_seeReceiptCommand == null)
-                    _seeReceiptCommand = new RelayCommand(SeeReceiptWindow);
-                return _seeReceiptCommand;
-            }
+            Producer = _producerBLL.GetProducerDetails();
         }
 
-        public void SeeReceiptWindow(object obj)
-        {
-            // Deschiderea unei noi ferestre pentru SeeReceipt (creare)
-            
-        }
     }
 }

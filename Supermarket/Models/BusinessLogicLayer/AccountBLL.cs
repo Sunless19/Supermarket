@@ -1,5 +1,4 @@
-﻿using Supermarket.DBContext;
-using Supermarket.Models;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,14 +12,12 @@ namespace Supermarket.Models.BusinessLogicLayer
 {
     internal class AccountBLL
     {
-        private supermarketDBContext context;
 
 
         public ObservableCollection<Account> AccountsList { get; set; }
 
-        public AccountBLL(supermarketDBContext contextDB)
+        public AccountBLL()
         {
-            context = contextDB ?? throw new ArgumentNullException(nameof(contextDB));
             AccountsList = GetAllAccounts();
         }
         public ObservableCollection<Account> GetAllAccounts()

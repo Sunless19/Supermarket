@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Search" Height="450" Width="800">
     <Grid>
-        
+        <ComboBox Margin="306,45,340,341" IsEditable="True"/>
+
     </Grid>
 </Window>

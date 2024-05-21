@@ -7,7 +7,6 @@ namespace Supermarket.Models
     {
         public Product()
         {
-            ReceiptItems = new HashSet<ReceiptItems>();
         }
 
         public int ProductId { get; set; }
@@ -15,10 +14,12 @@ namespace Supermarket.Models
         public string Barcode { get; set; }
         public int CategoryId { get; set; }
         public int ProducerId { get; set; }
-        public bool? InStock { get; set; }
+        public bool isDeleted { get; set; }
 
-        public virtual Category Category { get; set; }
-        public virtual Producer Producer { get; set; }
-        public virtual ICollection<ReceiptItems> ReceiptItems { get; set; }
+        public int Quantity { get; set; }
+        public string Unit { get; set; }
+        public DateTime ExpiryDate { get; set; }
+        public decimal SellingPrice { get; set; }
+
     }
 }

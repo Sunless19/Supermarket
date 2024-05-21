@@ -19,7 +19,7 @@ namespace Supermarket.ViewModels
 
         public AccountVM()
         {
-            _accountBLL = new AccountBLL(new DBContext.supermarketDBContext());
+            _accountBLL = new AccountBLL();
             AccountList=_accountBLL.GetAllAccounts();
         }
 

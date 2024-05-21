@@ -1,4 +1,4 @@
-﻿using Supermarket.DBContext;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,6 @@ namespace Supermarket.Models.BusinessLogicLayer
 {
     internal class ReceiptBLL
     {
-        private supermarketDBContext context = new supermarketDBContext();
         public ObservableCollection<Receipt> ReceiptList { get; set; }
 
         public ReceiptBLL()

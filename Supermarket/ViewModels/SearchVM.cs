@@ -8,5 +8,7 @@ namespace Supermarket.ViewModels
 {
     internal class SearchVM
     {
+        public SearchVM() { }
+
     }
 }

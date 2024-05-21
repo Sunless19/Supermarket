@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using Supermarket.DBContext;
 using Supermarket.Helper;
 using Supermarket.Models;
 using Supermarket.Models.BusinessLogicLayer;
@@ -19,14 +18,13 @@ namespace Supermarket.ViewModels
 {
     internal class LoginVM : BasePropertyChanged
     {
-        
         private AccountBLL _accountBLL;
         private string _username;
         private string _password;
 
         public LoginVM()
         {
-            _accountBLL = new AccountBLL(new supermarketDBContext());
+            _accountBLL = new AccountBLL();
         }
         public string Username
         {
