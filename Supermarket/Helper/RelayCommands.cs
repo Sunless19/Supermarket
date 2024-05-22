@@ -3,50 +3,41 @@ using System.Windows.Input;
 
 namespace WpfMVVMAgendaEF.Helpers
 {
-    class RelayCommand : ICommand
+    public class RelayCommand : ICommand
     {
-        private Action<object> commandTask;
-        private Predicate<object> canExecuteTask;
+        private readonly Action<object> _execute;
+        private readonly Predicate<object> _canExecute;
 
-        public RelayCommand(Action<object> workToDo)
-            : this(workToDo, DefaultCanExecute)
+        public RelayCommand(Action<object> execute)
+            : this(execute, null)
         {
-            commandTask = workToDo;
         }
 
-        public RelayCommand(Action<object> workToDo, Predicate<object> canExecute)
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            commandTask = workToDo;
-            canExecuteTask = canExecute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
 
-        private static bool DefaultCanExecute(object parameter)
+        public RelayCommand(Action execute)
         {
-            return true;
+            _execute = execute != null ? new Action<object>(_ => execute()) : throw new ArgumentNullException(nameof(execute));
         }
 
         public bool CanExecute(object parameter)
         {
-            //return canExecuteTask != null && canExecuteTask(parameter);
-            return true;
+            return _canExecute == null || _canExecute(parameter);
         }
 
-        public event EventHandler CanExecuteChanged;
-        /*{
-            add
-            {
-                CommandManager.RequerySuggested += value;
-            }
-
-            remove
-            {
-                CommandManager.RequerySuggested -= value;
-            }
-        }*/
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
         public void Execute(object parameter)
         {
-            commandTask(parameter);
+            _execute(parameter);
         }
     }
 }

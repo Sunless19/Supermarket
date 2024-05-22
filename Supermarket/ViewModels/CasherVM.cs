@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Supermarket.Helper;
 using Supermarket.Models;
@@ -18,8 +20,8 @@ namespace Supermarket.ViewModels
         private ObservableCollection<Product> _products;
         private ObservableCollection<Category> _category;
         private ObservableCollection<Producer> _producer;
-
         private ObservableCollection<Product> _productsToShow;
+
         public ObservableCollection<Producer> Producer
         {
             get => _producer;
@@ -35,6 +37,7 @@ namespace Supermarket.ViewModels
             set
             {
                 _category = value;
+                OnPropertyChanged(nameof(Category));
 
             }
         }
@@ -44,6 +47,7 @@ namespace Supermarket.ViewModels
             set
             {
                 _products = value;
+                OnPropertyChanged(nameof(Products));
 
             }
         }
@@ -53,6 +57,7 @@ namespace Supermarket.ViewModels
             set
             {
                 _stocks = value;
+                OnPropertyChanged(nameof(Stocks));
             }
         }
         public ObservableCollection<Product> ProductsToShow
@@ -61,10 +66,10 @@ namespace Supermarket.ViewModels
             set
             {
                 _productsToShow = value;
-                OnPropertyChanged(nameof(Products));
+                OnPropertyChanged(nameof(ProductsToShow));
             }
         }
-
+        public ICommand SearchCommand { get; }
         public CasherVM()
         {
             _productBLL = new ProductBLL();
@@ -75,12 +80,100 @@ namespace Supermarket.ViewModels
             LoadStocks();
             LoadCategory();
             LoadProducer();
+            SearchCommand = new RelayCommand(SearchProducts);
+        }
+        private Category _selectedCategory;
+        public Category SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                _selectedCategory = value;
+                OnPropertyChanged(nameof(SelectedCategory));
+            }
         }
 
+        private Producer _selectedProducer;
+        public Producer SelectedProducer
+        {
+            get => _selectedProducer;
+            set
+            {
+                _selectedProducer = value;
+                OnPropertyChanged(nameof(SelectedProducer));
+            }
+        }
+        private Product _selectedProductName;
+        public Product SelectedProductName
+        {
+            get => _selectedProductName;
+            set
+            {
+                _selectedProductName = value;
+                OnPropertyChanged(nameof(SelectedProductName));
+            }
+        }
+        private DateTime _selectedTime;
+        public DateTime SelectedTime
+        {
+            get => _selectedTime;
+            set
+            {
+                _selectedTime = value;
+                OnPropertyChanged(nameof(SelectedTime));
+            }
+        }
+
+        
+
+        
+        private void SearchProducts()
+        {
+            var filteredProducts = new ObservableCollection<Product>(_products);
+
+            if (SelectedCategory != null)
+            {
+                filteredProducts = new ObservableCollection<Product>(
+                    filteredProducts.Where(p => p.CategoryName == SelectedCategory.Name));
+            }
+
+            if (SelectedProducer != null)
+            {
+                filteredProducts = new ObservableCollection<Product>(
+                    filteredProducts.Where(p => p.ProducerName == SelectedProducer.Name));
+            }
+            try
+            {
+
+            if (SelectedProductName != null)
+            {
+                filteredProducts = new ObservableCollection<Product>(
+                    filteredProducts.Where(p => p.Name==SelectedProductName.Name));
+                
+            }
+            if (SelectedProductName != null)
+            {
+                filteredProducts = new ObservableCollection<Product>(
+                    filteredProducts.Where(p => p.Barcode == SelectedProductName.Barcode));
+
+            }
+            }
+            catch (Exception ex) { Console.WriteLine(ex); }
+
+            if (SelectedTime != DateTime.MinValue)
+            {
+                filteredProducts = new ObservableCollection<Product>(
+                    filteredProducts.Where(p => p.ExpiryDate < SelectedTime));
+            }
+
+            ProductsToShow = filteredProducts;
+        }
         private void LoadProducts()
         {
             Products = _productBLL.GetAllProducts();
+            Products = _productBLL.GetStockProducts();
         }
+        
         private void LoadStocks()
         {
             Stocks = _stockBLL.GetStockProducts();

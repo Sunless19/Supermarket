@@ -50,7 +50,43 @@ namespace Supermarket.Models.BusinessLogicLayer
             }
         }
 
-
+        public ObservableCollection<Product> GetStockProducts()
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("GetSearchProducts", con);
+                    ObservableCollection<Product> result = new ObservableCollection<Product>();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader.GetString(0) != null)
+                        {
+                            Product product = new Product();
+                            product.Name= reader.GetString(0);
+                            product.CategoryName = reader.GetString(1);
+                            product.ProducerName = reader.GetString(2);
+                            product.Barcode = reader.GetString(3);
+                            product.Unit= reader.GetString(4);
+                            product.SellingPrice = (decimal)reader[5];
+                            product.ExpiryDate = (DateTime)reader[6];
+                            product.Quantity = (int)reader[7];
+                            result.Add(product);
+                        }
+                    }
+                    reader.Close();
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    return null;
+                }
+            }
+        }
         
 
 

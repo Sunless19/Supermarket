@@ -24,7 +24,9 @@ namespace Supermarket.Views
             InitializeComponent();
         }
 
-        
-        
+        private void DatePicker_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+
+        }
     }
 }
