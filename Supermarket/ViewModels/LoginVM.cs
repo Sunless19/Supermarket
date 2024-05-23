@@ -65,8 +65,8 @@ namespace Supermarket.ViewModels
         }
         public void ToRegister(object obj)
         {
-            Register register = new Register();
-            register.ShowDialog();
+            //Register register = new Register();
+            //register.ShowDialog();
         }
         private ICommand connect;
 

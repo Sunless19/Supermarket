@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
 using Supermarket.Helper;
 using Supermarket.Models;
 using Supermarket.Models.BusinessLogicLayer;
@@ -21,7 +24,7 @@ namespace Supermarket.ViewModels
         private ObservableCollection<Category> _category;
         private ObservableCollection<Producer> _producer;
         private ObservableCollection<Product> _productsToShow;
-
+        
         public ObservableCollection<Producer> Producer
         {
             get => _producer;
@@ -69,9 +72,29 @@ namespace Supermarket.ViewModels
                 OnPropertyChanged(nameof(ProductsToShow));
             }
         }
+        public decimal _total;
+        public decimal Total
+        {
+            get => _total;
+            set
+            {
+                _total = value;
+                OnPropertyChanged(nameof(Total));
+            }
+        }
         public ICommand SearchCommand { get; }
+        public ICommand AddProductCommand { get; }
+        public ICommand DeleteProductCommand { get; }
         public CasherVM()
         {
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(SelectedProductName))
+                {
+                    IsProductSelected = true;
+                    Quantity = 1; // Reset quantity when a new product is selected
+                }
+            };
             _productBLL = new ProductBLL();
             _stockBLL = new StockBLL();
             _categoryBLL=new CategoryBLL();
@@ -81,7 +104,29 @@ namespace Supermarket.ViewModels
             LoadCategory();
             LoadProducer();
             SearchCommand = new RelayCommand(SearchProducts);
+            AddProductCommand = new RelayCommand(AddProduct);
+            DeleteProductCommand = new RelayCommand(DeleteProducts);
         }
+
+        private void DeleteProducts(object obj)
+        {
+            var ReceiptItem = CreateReceiptItem();
+            ReceiptItem = null;
+            ReceiptItemsList.Clear();
+            Total = 0;
+        }
+
+        private void AddProduct(object obj)
+        {
+            var receiptItem = CreateReceiptItem();
+            if(receiptItem != null && receiptItem.Quantity!=0)
+            {
+            ReceiptItemsList.Add(receiptItem);
+                Total += (decimal)receiptItem.Subtotal;
+            }
+        }
+        
+
         private Category _selectedCategory;
         public Category SelectedCategory
         {
@@ -126,7 +171,8 @@ namespace Supermarket.ViewModels
 
         
 
-        
+
+
         private void SearchProducts()
         {
             var filteredProducts = new ObservableCollection<Product>(_products);
@@ -165,6 +211,7 @@ namespace Supermarket.ViewModels
                 filteredProducts = new ObservableCollection<Product>(
                     filteredProducts.Where(p => p.ExpiryDate < SelectedTime));
             }
+            IsProductSelected = true;
 
             ProductsToShow = filteredProducts;
         }
@@ -173,7 +220,64 @@ namespace Supermarket.ViewModels
             Products = _productBLL.GetAllProducts();
             Products = _productBLL.GetStockProducts();
         }
-        
+        private Product _selectedProduct;
+        public Product SelectedProduct
+        {
+            get => _selectedProduct;
+            set
+            {
+                _selectedProduct = value;
+                OnPropertyChanged(nameof(SelectedProduct));
+                CreateReceiptItem();
+            }
+        }
+        private ObservableCollection<ReceiptItems> _receiptItemsList = new ObservableCollection<ReceiptItems>();
+        public ObservableCollection<ReceiptItems> ReceiptItemsList
+        {
+            get => _receiptItemsList;
+            set
+            {
+                _receiptItemsList = value;
+                OnPropertyChanged(nameof(ReceiptItemsList));
+            }
+        }
+
+        private int _quantity;
+        public int Quantity
+        {
+            get => _quantity;
+            set
+            {
+                _quantity = value;
+                OnPropertyChanged(nameof(Quantity));
+                
+            }
+        }
+        private ReceiptItems CreateReceiptItem()
+        {
+            if (SelectedProduct != null)
+            {
+                var receiptItem = new ReceiptItems
+                {
+                    ProductName= SelectedProduct.Name,
+                    Quantity = Quantity,
+                    Subtotal = SelectedProduct.SellingPrice * Quantity,
+                };
+                return receiptItem;
+            }
+            return null;
+        }
+
+        private bool _isProductSelected;
+        public bool IsProductSelected
+        {
+            get => _isProductSelected;
+            set
+            {
+                _isProductSelected = value;
+                OnPropertyChanged(nameof(IsProductSelected));
+            }
+        }
         private void LoadStocks()
         {
             Stocks = _stockBLL.GetStockProducts();

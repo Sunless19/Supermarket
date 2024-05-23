@@ -10,23 +10,9 @@ namespace Supermarket.Models.BusinessLogicLayer
 {
     internal class ReceiptBLL
     {
-        public ObservableCollection<Receipt> ReceiptList { get; set; }
 
-        public ReceiptBLL()
-        {
-            ReceiptList = new ObservableCollection<Receipt>();
-
-        }
-        public void AddMethod(object obj)
-        {
-
-        }
-        public void UpdateMethod(object obj)
-        {
-
-        }
-        public void DeleteMethod(object obj)
-        {
-        }
+        public ReceiptBLL() {  }
+        
+        
     }
 }

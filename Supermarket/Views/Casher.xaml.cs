@@ -19,14 +19,12 @@ namespace Supermarket.Views
     /// </summary>
     public partial class Casher : Window
     {
+        public int id;
         public Casher()
         {
             InitializeComponent();
         }
 
-        private void DatePicker_TargetUpdated(object sender, DataTransferEventArgs e)
-        {
-
-        }
+        
     }
 }

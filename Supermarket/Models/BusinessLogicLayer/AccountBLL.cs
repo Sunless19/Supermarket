@@ -37,6 +37,7 @@ namespace Supermarket.Models.BusinessLogicLayer
                         account.Username = reader.GetString(0);
                         account.Password = reader.GetString(1);
                         account.Role = reader.GetString(2);
+                        account.AccountId = (int)reader[3];
                         result.Add(account);
                     }
                     reader.Close();

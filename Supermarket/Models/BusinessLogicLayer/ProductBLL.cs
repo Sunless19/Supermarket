@@ -9,12 +9,7 @@ namespace Supermarket.Models.BusinessLogicLayer
 {
     internal class ProductBLL
     {
-
-        
-        public ProductBLL()
-        {
-        }
-
+        public ProductBLL() { }
         public ObservableCollection<Product> GetAllProducts()
         {
             using (SqlConnection con = DALHelper.Connection)
@@ -87,6 +82,7 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
+        
         
 
 
