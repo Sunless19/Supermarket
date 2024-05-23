@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Identity.Client;
 using Microsoft.Xaml.Behaviors;
 using Supermarket.Helper;
 using Supermarket.Models;
@@ -15,16 +16,19 @@ namespace Supermarket.ViewModels
 {
     internal class CasherVM : BasePropertyChanged
     {
+        private readonly int _accountID;
         private readonly ProductBLL _productBLL;
         private readonly StockBLL _stockBLL;
         private readonly CategoryBLL _categoryBLL;
         private readonly ProducerBLL _producerBLL;
+        private readonly ReceiptBLL _receiptBLL;
+        private readonly ReceiptItemsBLL _productOnReceiptBLL;
         private ObservableCollection<Stock> _stocks;
         private ObservableCollection<Product> _products;
         private ObservableCollection<Category> _category;
         private ObservableCollection<Producer> _producer;
         private ObservableCollection<Product> _productsToShow;
-        
+
         public ObservableCollection<Producer> Producer
         {
             get => _producer;
@@ -85,27 +89,64 @@ namespace Supermarket.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand AddProductCommand { get; }
         public ICommand DeleteProductCommand { get; }
+        public ICommand AddReceiptCommand { get; }
         public CasherVM()
         {
+            _accountID = AccountService.AccountID;
             PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(SelectedProductName))
                 {
                     IsProductSelected = true;
-                    Quantity = 1; // Reset quantity when a new product is selected
+                    Quantity = 1;
                 }
             };
             _productBLL = new ProductBLL();
             _stockBLL = new StockBLL();
-            _categoryBLL=new CategoryBLL();
+            _categoryBLL = new CategoryBLL();
             _producerBLL = new ProducerBLL();
+            _receiptBLL = new ReceiptBLL();
+            _productOnReceiptBLL = new ReceiptItemsBLL();
             LoadProducts();
             LoadStocks();
             LoadCategory();
             LoadProducer();
+            AddReceiptCommand = new RelayCommand(AddReceipt);
             SearchCommand = new RelayCommand(SearchProducts);
             AddProductCommand = new RelayCommand(AddProduct);
             DeleteProductCommand = new RelayCommand(DeleteProducts);
+        }
+
+        private void AddReceipt(object obj)
+        {
+            if (ReceiptItemsList.Count != 0)
+            {
+                var newReceipt = new Receipt
+                {
+                    CasherID = _accountID,
+                    Total = Total,
+                    Deleted = false,
+                    Date = DateTime.Now
+                };
+                int newReceiptId = _receiptBLL.AddReceipt(newReceipt);
+                if (newReceiptId > 0)
+                {
+                    foreach (var receiptItem in ReceiptItemsList)
+                    {
+                        var productOnReceipt = new ReceiptItems
+                        {
+                            ReceiptId = newReceiptId,
+                            Barcode = receiptItem.Barcode,
+                            Quantity = receiptItem.Quantity,
+                            Subtotal = receiptItem.Subtotal,
+                            Deleted = false
+                        };
+
+                        _productOnReceiptBLL.AddProductOnReceipt(productOnReceipt);
+                    }
+                }
+            }
+            else System.Windows.MessageBox.Show("You have selected no products to print the receipt", "No Product Selected", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void DeleteProducts(object obj)
@@ -119,13 +160,13 @@ namespace Supermarket.ViewModels
         private void AddProduct(object obj)
         {
             var receiptItem = CreateReceiptItem();
-            if(receiptItem != null && receiptItem.Quantity!=0)
+            if (receiptItem != null && receiptItem.Quantity != 0)
             {
-            ReceiptItemsList.Add(receiptItem);
+                ReceiptItemsList.Add(receiptItem);
                 Total += (decimal)receiptItem.Subtotal;
             }
         }
-        
+
 
         private Category _selectedCategory;
         public Category SelectedCategory
@@ -168,11 +209,6 @@ namespace Supermarket.ViewModels
                 OnPropertyChanged(nameof(SelectedTime));
             }
         }
-
-        
-
-
-
         private void SearchProducts()
         {
             var filteredProducts = new ObservableCollection<Product>(_products);
@@ -191,18 +227,18 @@ namespace Supermarket.ViewModels
             try
             {
 
-            if (SelectedProductName != null)
-            {
-                filteredProducts = new ObservableCollection<Product>(
-                    filteredProducts.Where(p => p.Name==SelectedProductName.Name));
-                
-            }
-            if (SelectedProductName != null)
-            {
-                filteredProducts = new ObservableCollection<Product>(
-                    filteredProducts.Where(p => p.Barcode == SelectedProductName.Barcode));
+                if (SelectedProductName != null)
+                {
+                    filteredProducts = new ObservableCollection<Product>(
+                        filteredProducts.Where(p => p.Name == SelectedProductName.Name));
 
-            }
+                }
+                if (SelectedProductName != null)
+                {
+                    filteredProducts = new ObservableCollection<Product>(
+                        filteredProducts.Where(p => p.Barcode == SelectedProductName.Barcode));
+
+                }
             }
             catch (Exception ex) { Console.WriteLine(ex); }
 
@@ -241,7 +277,6 @@ namespace Supermarket.ViewModels
                 OnPropertyChanged(nameof(ReceiptItemsList));
             }
         }
-
         private int _quantity;
         public int Quantity
         {
@@ -250,7 +285,7 @@ namespace Supermarket.ViewModels
             {
                 _quantity = value;
                 OnPropertyChanged(nameof(Quantity));
-                
+
             }
         }
         private ReceiptItems CreateReceiptItem()
@@ -259,9 +294,10 @@ namespace Supermarket.ViewModels
             {
                 var receiptItem = new ReceiptItems
                 {
-                    ProductName= SelectedProduct.Name,
+                    ProductName = SelectedProduct.Name,
                     Quantity = Quantity,
                     Subtotal = SelectedProduct.SellingPrice * Quantity,
+                    Barcode = SelectedProduct.Barcode
                 };
                 return receiptItem;
             }
@@ -282,12 +318,10 @@ namespace Supermarket.ViewModels
         {
             Stocks = _stockBLL.GetStockProducts();
         }
-
         private void LoadCategory()
         {
             Category = _categoryBLL.GetCategory();
         }
-
         private void LoadProducer()
         {
             Producer = _producerBLL.GetProducerDetails();

@@ -75,19 +75,23 @@ namespace Supermarket.ViewModels
             var account = _accountBLL.VerifyUser(Username, Password);
             if (account != null)
             {
-                if(account.Role=="Administrator")
+                AccountService.AccountID = account.AccountId;
+                if (account.Role == "Administrator")
                 {
+
                     Administrator administrator = new Administrator();
                     administrator.ShowDialog();
                 }
-                else if(account.Role== "Casier")
+                else if (account.Role == "Casier")
                 {
-                    Casher casher = new Casher();
+                    Casher casher = new Casher { };
                     casher.ShowDialog();
                 }
             }
             else
-                MessageBox.Show("Username or password inncorect.","Autentification",MessageBoxButton.OK,MessageBoxImage.Error);
+            {
+                MessageBox.Show("Username or password incorrect.", "Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         public ICommand Login
         {
@@ -101,4 +105,9 @@ namespace Supermarket.ViewModels
         #endregion
 
     }
+}
+
+public static class AccountService
+{
+    public static int AccountID { get; set; }
 }

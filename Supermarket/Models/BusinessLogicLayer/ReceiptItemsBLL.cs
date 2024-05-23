@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,23 +12,36 @@ namespace Supermarket.Models.BusinessLogicLayer
 {
     internal class ReceiptItemsBLL
     {
-        public ObservableCollection<ReceiptItems> ReceiptItemsList { get; set; }
 
         public ReceiptItemsBLL()
         {
-            ReceiptItemsList = new ObservableCollection<ReceiptItems>();
-
         }
-        public void AddMethod(object obj)
+        public void AddProductOnReceipt(ReceiptItems receiptItems)
         {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("AddProductsOnReceipt", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-        }
-        public void UpdateMethod(object obj)
-        {
+                    // Adaugă parametrii pentru procedura stocată
+                    cmd.Parameters.AddWithValue("@Barcode", receiptItems.Barcode);
+                    cmd.Parameters.AddWithValue("@Quantity", receiptItems.Quantity);
+                    cmd.Parameters.AddWithValue("@Subtotal", receiptItems.Subtotal);
+                    cmd.Parameters.AddWithValue("@Deleted", receiptItems.Deleted);
 
-        }
-        public void DeleteMethod(object obj)
-        {
+                    // Deschide conexiunea și execută procedura stocată
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    // Tratează eroarea în mod corespunzător
+                }
+            }
         }
     }
 }

@@ -38,7 +38,7 @@
 
         <Button Content="Search" HorizontalAlignment="Left" Margin="650,34,0,0" Command="{Binding SearchCommand}"  VerticalAlignment="Top" Height="22" Width="86"/>
         <Button Content="New Receipt" HorizontalAlignment="Left" Margin="650,80,0,0" VerticalAlignment="Top" Height="22" Width="86" Command="{Binding DeleteProductCommand}"/>
-        <Button Content="Add Receipt" HorizontalAlignment="Left" Margin="650,133,0,0" VerticalAlignment="Top" Height="22" Width="86"/>
+        <Button Content="Add Receipt" HorizontalAlignment="Left" Margin="650,133,0,0" VerticalAlignment="Top" Height="22" Width="86" Command="{Binding AddReceiptCommand}"/>
         <Button Content="Add Product" HorizontalAlignment="Left" Margin="650,186,0,0" VerticalAlignment="Top" Height="22" Width="86" Command="{Binding AddProductCommand}"/>
         <!-- Lista de produse -->
         <ListBox x:Name="ProductListBox" ItemsSource="{Binding ReceiptItemsList}" HorizontalAlignment="Left" Margin="106,10,0,0" VerticalAlignment="Top" Width="267" Height="246">
