@@ -175,11 +175,16 @@ namespace Supermarket.ViewModels
             {
 
                 var existingReceiptItemList = ProductsToShow.FirstOrDefault(item => item.Name == receiptItem.ProductName);
-                if (receiptItem != null && receiptItem.Quantity != 0 && Quantity < existingReceiptItemList.Quantity)
+                if (DateTime.Now < existingReceiptItemList.ExpiryDate)
                 {
-                    ReceiptItemsList.Add(receiptItem);
-                    Total += (decimal)receiptItem.Subtotal;
+                    if (receiptItem != null && receiptItem.Quantity != 0 && Quantity < existingReceiptItemList.Quantity)
+                    {
+                        ReceiptItemsList.Add(receiptItem);
+                        Total += (decimal)receiptItem.Subtotal;
+                    }
                 }
+                else { //aici faci deleted in baza de date. 
+                       }
             }
         }
 
