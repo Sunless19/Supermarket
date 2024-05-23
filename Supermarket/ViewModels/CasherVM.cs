@@ -115,12 +115,16 @@ namespace Supermarket.ViewModels
             SearchCommand = new RelayCommand(SearchProducts);
             AddProductCommand = new RelayCommand(AddProduct);
             DeleteProductCommand = new RelayCommand(DeleteProducts);
+
         }
+
+
 
         private void AddReceipt(object obj)
         {
             if (ReceiptItemsList.Count != 0)
             {
+                //Added the receipt
                 var newReceipt = new Receipt
                 {
                     CasherID = _accountID,
@@ -129,6 +133,7 @@ namespace Supermarket.ViewModels
                     Date = DateTime.Now
                 };
                 int newReceiptId = _receiptBLL.AddReceipt(newReceipt);
+                //Added the products on the receipt
                 if (newReceiptId > 0)
                 {
                     foreach (var receiptItem in ReceiptItemsList)
@@ -143,8 +148,13 @@ namespace Supermarket.ViewModels
                         };
 
                         _productOnReceiptBLL.AddProductOnReceipt(productOnReceipt);
+                        _stockBLL.UpdateStock(receiptItem.Barcode, -receiptItem.Quantity);
                     }
                 }
+                DeleteProducts(obj);
+                System.Windows.MessageBox.Show("Your receipt has been registered", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadProducts();
+                LoadStocks();
             }
             else System.Windows.MessageBox.Show("You have selected no products to print the receipt", "No Product Selected", MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -159,11 +169,17 @@ namespace Supermarket.ViewModels
 
         private void AddProduct(object obj)
         {
+
             var receiptItem = CreateReceiptItem();
-            if (receiptItem != null && receiptItem.Quantity != 0)
+            if (receiptItem != null)
             {
-                ReceiptItemsList.Add(receiptItem);
-                Total += (decimal)receiptItem.Subtotal;
+
+                var existingReceiptItemList = ProductsToShow.FirstOrDefault(item => item.Name == receiptItem.ProductName);
+                if (receiptItem != null && receiptItem.Quantity != 0 && Quantity < existingReceiptItemList.Quantity)
+                {
+                    ReceiptItemsList.Add(receiptItem);
+                    Total += (decimal)receiptItem.Subtotal;
+                }
             }
         }
 
@@ -290,7 +306,7 @@ namespace Supermarket.ViewModels
         }
         private ReceiptItems CreateReceiptItem()
         {
-            if (SelectedProduct != null)
+            if (SelectedProduct != null && SelectedProduct.Quantity != 0)
             {
                 var receiptItem = new ReceiptItems
                 {

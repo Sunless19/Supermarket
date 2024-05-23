@@ -23,7 +23,6 @@ namespace Supermarket.Models.BusinessLogicLayer
                 {
                     SqlCommand cmd = new SqlCommand("AddReceipt", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     cmd.Parameters.AddWithValue("@ReleaseDate", receipt.Date);
                     cmd.Parameters.AddWithValue("@CasherID", receipt.CasherID);
                     cmd.Parameters.AddWithValue("@Total", receipt.Total);

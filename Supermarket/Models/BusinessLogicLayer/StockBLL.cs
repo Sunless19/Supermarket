@@ -52,16 +52,29 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
-        public void AddMethod(object obj)
+        public void UpdateStock(string Barcode,int Quantity)
         {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("UpdateStock", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-        }
-        public void UpdateMethod(object obj)
-        {
+                    // Adaugă parametrii
+                    cmd.Parameters.AddWithValue("@Barcode", Barcode);
+                    cmd.Parameters.AddWithValue("@QuantityChange", Quantity);
 
-        }
-        public void DeleteMethod(object obj)
-        {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    // Tratează eroarea în mod corespunzător
+                }
+            }
         }
     }
 }
