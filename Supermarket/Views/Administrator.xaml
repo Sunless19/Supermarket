@@ -11,13 +11,18 @@
     </Window.DataContext>
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/Resources/adm.png"/>
+            <RadialGradientBrush>
+                <GradientStop Color="Black" Offset="0.147"/>
+                <GradientStop Color="#FFD18989" Offset="0.678"/>
+                <GradientStop Color="#FFD18989" Offset="0.614"/>
+            </RadialGradientBrush>
         </Grid.Background>
-       
-        <Button Content="Users" HorizontalAlignment="Center" Margin="0,111,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
-        <Button Content="Products" HorizontalAlignment="Center" Margin="0,163,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
-        <Button Content="Producers" HorizontalAlignment="Center" Margin="0,215,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
-        <Button Content="Stocks" HorizontalAlignment="Center" Margin="0,267,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
-        <Button Content="Receipts" HorizontalAlignment="Center" Margin="0,319,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF129FA7" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" />
+
+        <Button Content="Users" HorizontalAlignment="Center" Margin="0,118,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF3DA755" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding UsersView}" />
+        <Button Content="Products" HorizontalAlignment="Center" Margin="0,170,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF3DA755" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding ProductsView}" />
+        <Button Content="Producers" HorizontalAlignment="Center" Margin="0,222,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF3DA755" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding ProducersView}"/>
+        <Button Content="Stocks" HorizontalAlignment="Center" Margin="0,274,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF3DA755" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding StocksView}" />
+        <Button Content="Receipts" HorizontalAlignment="Center" Margin="0,326,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF3DA755" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding ReceiptsView}" />
+        <Button Content="Categories" HorizontalAlignment="Center" Margin="0,66,0,0" VerticalAlignment="Top" Height="47" Width="236" Background="#FF3DA755" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding CategoriesView}" />
     </Grid>
 </Window>

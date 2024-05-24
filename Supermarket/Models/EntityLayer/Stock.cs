@@ -13,6 +13,8 @@ namespace Supermarket.Models
         public DateTime? ExpirationDate { get; set; }
         public decimal? PurchasePrice { get; set; }
         public decimal? SelllingPrice { get; set; }
-        public bool isDeleted { get; set; }
+        public bool isDeleted { get; set; } = false;
+        
+
     }
 }

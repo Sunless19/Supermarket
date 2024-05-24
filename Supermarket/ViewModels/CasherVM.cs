@@ -29,6 +29,33 @@ namespace Supermarket.ViewModels
         private ObservableCollection<Producer> _producer;
         private ObservableCollection<Product> _productsToShow;
 
+        public CasherVM()
+        {
+            _accountID = AccountService.AccountID;
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(SelectedProductName))
+                {
+                    IsProductSelected = true;
+                    Quantity = 1;
+                }
+            };
+            _productBLL = new ProductBLL();
+            _stockBLL = new StockBLL();
+            _categoryBLL = new CategoryBLL();
+            _producerBLL = new ProducerBLL();
+            _receiptBLL = new ReceiptBLL();
+            _productOnReceiptBLL = new ReceiptItemsBLL();
+            LoadProducts();
+            LoadStocks();
+            LoadCategory();
+            LoadProducer();
+            AddReceiptCommand = new RelayCommand(AddReceipt);
+            SearchCommand = new RelayCommand(SearchProducts);
+            AddProductCommand = new RelayCommand(AddProduct);
+            DeleteProductCommand = new RelayCommand(DeleteProducts);
+
+        }
         public ObservableCollection<Producer> Producer
         {
             get => _producer;
@@ -90,33 +117,6 @@ namespace Supermarket.ViewModels
         public ICommand AddProductCommand { get; }
         public ICommand DeleteProductCommand { get; }
         public ICommand AddReceiptCommand { get; }
-        public CasherVM()
-        {
-            _accountID = AccountService.AccountID;
-            PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(SelectedProductName))
-                {
-                    IsProductSelected = true;
-                    Quantity = 1;
-                }
-            };
-            _productBLL = new ProductBLL();
-            _stockBLL = new StockBLL();
-            _categoryBLL = new CategoryBLL();
-            _producerBLL = new ProducerBLL();
-            _receiptBLL = new ReceiptBLL();
-            _productOnReceiptBLL = new ReceiptItemsBLL();
-            LoadProducts();
-            LoadStocks();
-            LoadCategory();
-            LoadProducer();
-            AddReceiptCommand = new RelayCommand(AddReceipt);
-            SearchCommand = new RelayCommand(SearchProducts);
-            AddProductCommand = new RelayCommand(AddProduct);
-            DeleteProductCommand = new RelayCommand(DeleteProducts);
-
-        }
 
 
 
@@ -177,7 +177,7 @@ namespace Supermarket.ViewModels
                 var existingReceiptItemList = ProductsToShow.FirstOrDefault(item => item.Name == receiptItem.ProductName);
                 if (DateTime.Now < existingReceiptItemList.ExpiryDate)
                 {
-                    if (receiptItem != null && receiptItem.Quantity != 0 && Quantity < existingReceiptItemList.Quantity)
+                    if (receiptItem != null && receiptItem.Quantity != 0 && Quantity <= existingReceiptItemList.Quantity)
                     {
                         ReceiptItemsList.Add(receiptItem);
                         Total += (decimal)receiptItem.Subtotal;
@@ -269,6 +269,7 @@ namespace Supermarket.ViewModels
                     filteredProducts.Where(p => p.ExpiryDate < SelectedTime));
             }
             IsProductSelected = true;
+            filteredProducts = new ObservableCollection<Product>(filteredProducts.Where(p => p.Quantity != 0));
 
             ProductsToShow = filteredProducts;
         }
