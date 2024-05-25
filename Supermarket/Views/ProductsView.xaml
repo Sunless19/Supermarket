@@ -3,10 +3,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Supermarket.Views"
+        xmlns:local="clr-namespace:Supermarket.ViewModels"
         mc:Ignorable="d"
         Title="ProductsView" Height="450" Width="800">
+    <Window.DataContext>
+        <local:ProductsVM/>
+    </Window.DataContext>
+
     <Grid>
-        
+        <DataGrid x:Name="ProductDataGrid" HorizontalAlignment="Left" ItemsSource="{Binding ProductsToShow}"  SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" Margin="26,0,0,0" VerticalAlignment="Center" Width="439" Height="365" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ProductName" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Barcode" Binding="{Binding Barcode}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="CategoryID" Binding="{Binding CategoryId}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="ProducerID" Binding="{Binding ProducerId}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Deleted" Binding="{Binding isDeleted}" Width="*" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Content="Add" HorizontalAlignment="Left" Margin="518,35,0,0" VerticalAlignment="Top" Command="{Binding AddCommand}" Width="40" Height="40"/>
+        <Button Content="Edit" HorizontalAlignment="Left" Margin="617,35,0,0" VerticalAlignment="Top" Command="{Binding EditCommand}" Width="40" Height="40"/>
+        <Button Content="Delete" HorizontalAlignment="Left" Margin="708,35,0,0" VerticalAlignment="Top" Command="{Binding DeleteCommand}" Width="40" Height="40"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="578,96,0,0" TextWrapping="Wrap" Text="Barcode" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="578,145,0,0" TextWrapping="Wrap" Text="ProductName" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="578,188,0,0" TextWrapping="Wrap" Text="CategoryId" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="578,231,0,0" TextWrapping="Wrap" Text="ProducerID" VerticalAlignment="Top"/>
+
+        <ComboBox HorizontalAlignment="Left" Margin="578,117,0,0" VerticalAlignment="Top" IsEditable="True" Width="138" 
+            ItemsSource="{Binding ProductsToShow}" 
+            DisplayMemberPath="Barcode"  
+            SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" Text="{Binding Product.Barcode}"/>
+
+        <TextBox HorizontalAlignment="Left" Margin="578,209,0,0" VerticalAlignment="Top" Width="138" Text="{Binding Product.CategoryId}"/>
+        <TextBox HorizontalAlignment="Left" Margin="578,165,0,0" VerticalAlignment="Top" Width="138" Text="{Binding Product.Name}"/>
+        <TextBox HorizontalAlignment="Left" Margin="578,252,0,0" VerticalAlignment="Top" Width="138" Text="{Binding Product.ProducerId}"/>
     </Grid>
 </Window>

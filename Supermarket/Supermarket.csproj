@@ -187,6 +187,7 @@
     <Compile Include="ViewModels\CasherVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
+    <Compile Include="ViewModels\ProductsVM.cs" />
     <Compile Include="ViewModels\ReceiptsVM.cs" />
     <Compile Include="ViewModels\SearchVM.cs" />
     <Compile Include="ViewModels\StocksVM.cs" />

@@ -44,7 +44,6 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
-
         public ObservableCollection<Product> GetStockProducts()
         {
             using (SqlConnection con = DALHelper.Connection)
@@ -83,8 +82,75 @@ namespace Supermarket.Models.BusinessLogicLayer
             }
         }
         
-        
+        public void DeleteProduct(Product product)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("DeleteProduct", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.AddWithValue("@Barcode", product.Barcode);
 
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
+        public void EditProduct(Product product)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("EditProduct", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Barcode", product.Barcode);
+                    cmd.Parameters.AddWithValue("@Name", product.Name);
+                    cmd.Parameters.AddWithValue("@CategoryID", product.CategoryId);
+                    cmd.Parameters.AddWithValue("@ProducerID", product.ProducerId);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
+        public void AddProduct(Product product)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("AddProduct", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Barcode", product.Barcode);
+                    cmd.Parameters.AddWithValue("@Name", product.Name);
+                    cmd.Parameters.AddWithValue("@CategoryID", product.CategoryId);
+                    cmd.Parameters.AddWithValue("@ProducerID", product.ProducerId);
+                    cmd.Parameters.AddWithValue("@Deleted", false);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
     }
 }
