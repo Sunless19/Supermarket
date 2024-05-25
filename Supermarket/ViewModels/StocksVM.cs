@@ -1,4 +1,4 @@
-﻿using Supermarket.Helper;
+﻿ using Supermarket.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,7 +109,6 @@ namespace Supermarket.ViewModels
             set
             {
                 _productsToShow = value;
-
                 OnPropertyChanged(nameof(ProductsToShow));
             }
         }

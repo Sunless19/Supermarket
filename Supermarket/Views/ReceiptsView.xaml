@@ -3,10 +3,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Supermarket.Views"
+        xmlns:local="clr-namespace:Supermarket.ViewModels"
         mc:Ignorable="d"
-        Title="ReceiptsView" Height="450" Width="800">
+        Title="ReceiptsView" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <local:ReceiptsVM/>
+    </Window.DataContext>
     <Grid>
-        
+        <DataGrid x:Name="ProductDataGrid" HorizontalAlignment="Left" ItemsSource="{Binding ReceiptsToShow}"  SelectedItem="{Binding SelectedReceipt, Mode=TwoWay}" Margin="26,0,0,0" VerticalAlignment="Center" Width="439" Height="365" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding ReceiptId}" Width="25" IsReadOnly="True"/>
+                <DataGridTextColumn Header="CasherID" Binding="{Binding CasherID}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="ReleaseDate" Binding="{Binding Date, StringFormat=\{0:yyyy-MM-dd\}}" Width="*" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="ProductDataGrid_Copy" HorizontalAlignment="Left" ItemsSource="{Binding ItemsToShow}" Margin="507,0,0,0" VerticalAlignment="Center" Width="266" Height="365" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Barcode" Binding="{Binding Barcode}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal}" Width="*" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
     </Grid>
 </Window>

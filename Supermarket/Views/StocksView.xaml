@@ -26,9 +26,9 @@
 
 
 
-        <Button Content="Add" HorizontalAlignment="Left" Margin="660,39,0,0" VerticalAlignment="Top" Height="55" Width="107" Command="{Binding AddCommand}" RenderTransformOrigin="0.63,0.499" Background="#FFAA2020"/>
-        <Button Content="Edit" HorizontalAlignment="Left" Margin="660,100,0,0" VerticalAlignment="Top" Height="56" Width="107" Command="{Binding EditCommand}" RenderTransformOrigin="0.63,0.499" Background="#FFAA2020"/>
-        <Button Content="Delete" HorizontalAlignment="Left" Margin="660,162,0,0" VerticalAlignment="Top" Height="55" Width="107" Command="{Binding DeleteCommand}" RenderTransformOrigin="0.63,0.499" Background="#FFAA2020"/>
+        <Button Content="Add" HorizontalAlignment="Left" Margin="660,39,0,0" VerticalAlignment="Top" Height="55" Width="107" Command="{Binding AddCommand}" RenderTransformOrigin="0.63,0.499" Background="#FFAA2020" Foreground="White"/>
+        <Button Content="Edit" HorizontalAlignment="Left" Margin="660,100,0,0" VerticalAlignment="Top" Height="56" Width="107" Command="{Binding EditCommand}" RenderTransformOrigin="0.63,0.499" Background="#FFAA2020" Foreground="White"/>
+        <Button Content="Delete" HorizontalAlignment="Left" Margin="660,162,0,0" VerticalAlignment="Top" Height="55" Width="107" Command="{Binding DeleteCommand}" RenderTransformOrigin="0.63,0.499" Background="#FFAA2020" Foreground="White"/>
 
 
         <ComboBox HorizontalAlignment="Left" Margin="244,293,0,0" VerticalAlignment="Top" Width="142" IsEditable="True" Height="20"

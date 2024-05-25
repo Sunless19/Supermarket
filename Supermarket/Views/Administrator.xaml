@@ -12,9 +12,9 @@
     <Grid>
         <Grid.Background>
             <RadialGradientBrush>
-                <GradientStop Color="Black" Offset="0.147"/>
+                <GradientStop Color="Black" Offset="0.185"/>
                 <GradientStop Color="#FFD18989" Offset="0.678"/>
-                <GradientStop Color="#FFD18989" Offset="0.614"/>
+                <GradientStop Color="#FF59A488" Offset="0.614"/>
             </RadialGradientBrush>
         </Grid.Background>
 

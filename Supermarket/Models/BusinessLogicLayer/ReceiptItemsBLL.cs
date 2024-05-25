@@ -43,5 +43,39 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
+
+        public ObservableCollection<ReceiptItems> GetProductsOnReceipt()
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("GetProductsOnReceipt", con);
+                    ObservableCollection<ReceiptItems> result = new ObservableCollection<ReceiptItems>();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader != null)
+                        {
+                            ReceiptItems product = new ReceiptItems();
+                            product.Barcode = reader.GetString(0);
+                            product.Quantity = (int)reader[1];
+                            product.ReceiptId = (int)reader[2];
+                            product.Subtotal = (decimal)reader[3];
+                            result.Add(product);
+                        }
+                    }
+                    reader.Close();
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    return null;
+                }
+            }
+        }
     }
 }

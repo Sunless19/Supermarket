@@ -187,6 +187,7 @@
     <Compile Include="ViewModels\CasherVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
+    <Compile Include="ViewModels\ReceiptsVM.cs" />
     <Compile Include="ViewModels\SearchVM.cs" />
     <Compile Include="ViewModels\StocksVM.cs" />
     <Compile Include="Views\CategoriesView.xaml.cs">
@@ -209,9 +210,6 @@
     </Compile>
     <Compile Include="Views\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Stocks.xaml.cs">
-      <DependentUpon>Stocks.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StocksView.xaml.cs">
       <DependentUpon>StocksView.xaml</DependentUpon>
@@ -280,10 +278,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Search.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Stocks.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
