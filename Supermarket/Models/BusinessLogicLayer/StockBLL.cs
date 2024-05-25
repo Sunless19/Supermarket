@@ -18,7 +18,7 @@ namespace Supermarket.Models.BusinessLogicLayer
 
         }
 
-        public ObservableCollection<Stock> GetStockProducts() 
+        public ObservableCollection<Stock> GetStockProducts()
         {
             using (SqlConnection con = DALHelper.Connection)
             {
@@ -52,7 +52,7 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
-        public void UpdateStock(string Barcode,int Quantity)
+        public void UpdateStock(string Barcode, int Quantity)
         {
             using (SqlConnection con = DALHelper.Connection)
             {
@@ -101,7 +101,11 @@ namespace Supermarket.Models.BusinessLogicLayer
                             stock.ExpirationDate = (DateTime)reader[5];
                             stock.DateOfSupply = (DateTime)reader[6];
                             stock.SelllingPrice = (decimal)reader[7];
-                            result.Add(stock);
+                            stock.isDeleted = (bool)reader[8];
+                            if (stock.isDeleted == false)
+                            {
+                                result.Add(stock);
+                            }
                         }
                     }
                     reader.Close();
@@ -114,7 +118,7 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
-        public void AddStock(Stock stock,string Barcode)
+        public void AddStock(Stock stock, string Barcode)
         {
             using (SqlConnection con = DALHelper.Connection)
             {
@@ -131,6 +135,60 @@ namespace Supermarket.Models.BusinessLogicLayer
                     cmd.Parameters.AddWithValue("@ExpiryDate", stock.ExpirationDate);
                     cmd.Parameters.AddWithValue("@PurchasePrice", stock.PurchasePrice);
                     cmd.Parameters.AddWithValue("@SellingPrice", stock.SelllingPrice);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    // Tratează eroarea în mod corespunzător
+                }
+            }
+        }
+        public void DeleteStock(Stock stock,string Barcode)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("DeleteStock", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Adaugă parametrii
+                    cmd.Parameters.AddWithValue("@Barcode", Barcode);
+                    cmd.Parameters.AddWithValue("@Deleted", stock.isDeleted);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    // Tratează eroarea în mod corespunzător
+                }
+            }
+        }
+        public void EditStock(Stock stock, string Barcode)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("EditStock", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Adaugă parametrii
+                    cmd.Parameters.AddWithValue("@ID", stock.StockId);
+                    cmd.Parameters.AddWithValue("@Barcode", Barcode);
+                    cmd.Parameters.AddWithValue("@PurchasePrice", stock.PurchasePrice);
+                    cmd.Parameters.AddWithValue("@Unit", stock.Unit);
+                    cmd.Parameters.AddWithValue("@Quantity", stock.Quantity);
+                    cmd.Parameters.AddWithValue("@SellingPrice", stock.SelllingPrice);
+                    cmd.Parameters.AddWithValue("@DateOfSupply", stock.DateOfSupply);
+                    cmd.Parameters.AddWithValue("@ExpirationDate", stock.ExpirationDate);
 
                     con.Open();
                     cmd.ExecuteNonQuery();

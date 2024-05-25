@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using Supermarket.Models.BusinessLogicLayer;
 using WpfMVVMAgendaEF.Helpers;
 using System.Windows.Input;
-
+//Reference that newValue is in fact the barcode of product.
 namespace Supermarket.ViewModels
 {
     internal class StocksVM : BasePropertyChanged
@@ -29,19 +29,44 @@ namespace Supermarket.ViewModels
             }
         }
         public ICommand AddCommand { get; set; }
+        public ICommand EditCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
         public StocksVM()
         {
             _stockBLL = new StockBLL();
             ProductsToShow = _stockBLL.GetStocks();
             _stock = new Stock();
             AddCommand = new RelayCommand(AddStockToDatabase);
+            EditCommand = new RelayCommand(EditStock);
+            DeleteCommand = new RelayCommand(DeleteStockFromDatabase);
+
         }
         private void AddStockToDatabase(object parameter)
         {
-            if(NewValue!=null)
+            if (NewValue != null)
             {
-            _stockBLL.AddStock(Stock,NewValue);
+                if (Stock.ExpirationDate != null && Stock.Quantity != null && Stock.DateOfSupply != null && Stock.Unit != null && Stock.SelllingPrice != null && Stock.PurchasePrice != null)
+                    if (Stock.ExpirationDate > Stock.DateOfSupply && Stock.PurchasePrice < Stock.SelllingPrice)
+                        _stockBLL.AddStock(Stock, NewValue);
+                ProductsToShow = _stockBLL.GetStocks();
+            }
+        }
+        private void EditStock(object parameter)
+        {
+            if (Stock.ExpirationDate != null && Stock.Quantity != null && Stock.DateOfSupply != null && Stock.Unit != null && Stock.SelllingPrice != null && Stock.PurchasePrice != null)
+                if (Stock.ExpirationDate > Stock.DateOfSupply && Stock.PurchasePrice < Stock.SelllingPrice)
+                {
+                    _stockBLL.EditStock(Stock, NewValue);
+                }
             ProductsToShow = _stockBLL.GetStocks();
+        }
+        private void DeleteStockFromDatabase(object parameter)
+        {
+            if (SelectedStock != null)
+            {
+                Stock.isDeleted = true;
+                _stockBLL.DeleteStock(SelectedStock, NewValue);
+                ProductsToShow = _stockBLL.GetStocks();
             }
         }
 
@@ -73,6 +98,7 @@ namespace Supermarket.ViewModels
             set
             {
                 _stock = value;
+                _stock.StockId = SelectedStock.StockId;
                 OnPropertyChanged(nameof(Stock));
             }
         }
@@ -83,6 +109,7 @@ namespace Supermarket.ViewModels
             set
             {
                 _productsToShow = value;
+
                 OnPropertyChanged(nameof(ProductsToShow));
             }
         }
