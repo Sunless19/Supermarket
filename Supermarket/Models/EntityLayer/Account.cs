@@ -14,7 +14,8 @@ namespace Supermarket.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
         public virtual ICollection<Receipt> Receipt { get; set; }
+        public bool isDeleted { get; set; }
     }
 }

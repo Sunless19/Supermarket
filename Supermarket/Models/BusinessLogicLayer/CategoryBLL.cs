@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Supermarket.ViewModels;
 
 namespace Supermarket.Models.BusinessLogicLayer
 {
@@ -34,6 +35,7 @@ namespace Supermarket.Models.BusinessLogicLayer
                         Category category = new Category();
                         category.CategoryId = (int)reader[0];
                         category.Name= reader.GetString(1);
+                        category.isDeleted = (bool)reader[2];
                         result.Add(category);
                     }
                     reader.Close();
@@ -46,16 +48,72 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
-        public void AddMethod(object obj)
+        
+        internal void AddCategory(Category category)
         {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("AddCategory", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-        }
-        public void UpdateMethod(object obj)
-        {
+                    cmd.Parameters.AddWithValue("@ID", category.CategoryId);
+                    cmd.Parameters.AddWithValue("@Name", category.Name);
+                    cmd.Parameters.AddWithValue("@Deleted", false);
 
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
         }
-        public void DeleteMethod(object obj)
+        public void EditCategory(Category category)
         {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("EditCategory", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ID", category.CategoryId);
+                    cmd.Parameters.AddWithValue("@Name", category.Name);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
+        public void DeleteCategory(Category category)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("DeleteCategory", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ID", category.CategoryId);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
         }
     }
 }

@@ -38,6 +38,8 @@ namespace Supermarket.Models.BusinessLogicLayer
                         account.Password = reader.GetString(1);
                         account.Role = reader.GetString(2);
                         account.AccountId = (int)reader[3];
+                        account.Name=reader.GetString(4);
+                        account.isDeleted = (bool)reader[5];
                         result.Add(account);
                     }
                     reader.Close();
@@ -51,7 +53,79 @@ namespace Supermarket.Models.BusinessLogicLayer
                 }
             }
         }
+        public void AddUser(Account account)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("AddUser", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.AddWithValue("@ID", account.AccountId);
+                    cmd.Parameters.AddWithValue("@Name", account.Name);
+                    cmd.Parameters.AddWithValue("@Password",account.Password);
+                    cmd.Parameters.AddWithValue("@Username", account.Username);
+                    cmd.Parameters.AddWithValue("@Role", account.Role);
+                    cmd.Parameters.AddWithValue("@Deleted", false);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
+        public void EditUser(Account account)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("EditUser", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ID", account.AccountId);
+                    cmd.Parameters.AddWithValue("@Name", account.Name);
+                    cmd.Parameters.AddWithValue("@Password", account.Password);
+                    cmd.Parameters.AddWithValue("@Username", account.Username);
+                    cmd.Parameters.AddWithValue("@Role", account.Role);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
+
+        public void DeleteUser(Account account)
+        {
+            using (SqlConnection con = DALHelper.Connection)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("DeleteUser", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@ID", account.AccountId);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+        }
         public Account VerifyUser(string username, string password)
         {
             ObservableCollection<Account> allAccounts = GetAllAccounts();

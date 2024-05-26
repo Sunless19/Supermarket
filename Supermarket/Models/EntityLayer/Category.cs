@@ -10,6 +10,7 @@ namespace Supermarket.Models
         }
         public int CategoryId { get; set; }
         public string Name { get; set; }
+        public bool isDeleted {  get; set; }
 
     }
 }

@@ -185,12 +185,15 @@
     <Compile Include="Helper\PasswordBoxBehavior.cs" />
     <Compile Include="ViewModels\AdministratorVM.cs" />
     <Compile Include="ViewModels\CasherVM.cs" />
+    <Compile Include="ViewModels\CategoriesVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
+    <Compile Include="ViewModels\ProducerVM.cs" />
     <Compile Include="ViewModels\ProductsVM.cs" />
     <Compile Include="ViewModels\ReceiptsVM.cs" />
     <Compile Include="ViewModels\SearchVM.cs" />
     <Compile Include="ViewModels\StocksVM.cs" />
+    <Compile Include="ViewModels\UsersVM.cs" />
     <Compile Include="Views\CategoriesView.xaml.cs">
       <DependentUpon>CategoriesView.xaml</DependentUpon>
     </Compile>

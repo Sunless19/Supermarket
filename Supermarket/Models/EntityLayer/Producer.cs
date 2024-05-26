@@ -13,6 +13,7 @@ namespace Supermarket.Models
         public int ProducerId { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
+        public bool isDeleted {  get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
     }
