@@ -12,17 +12,16 @@
         <local:LoginVM/>
     </Window.DataContext>
     <Grid Margin="0,0,-75,-6">
-        <Grid.Background>
-            <ImageBrush ImageSource="/Resources/login3.png"/>
-        </Grid.Background>
-        <TextBox Text="{Binding Username}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="250" Height="31" Background="#FF129FA7" SelectionBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24"/>
-        <PasswordBox HorizontalAlignment="Center" Margin="0,253,0,0" VerticalAlignment="Top" Width="250" Height="31" Background="#FF129FA7" FontFamily="Bradley Hand ITC" FontSize="24" SelectionTextBrush="{x:Null}" >
+
+        <TextBox Text="{Binding Username}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="31" Background="#FF129FA7" SelectionBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Margin="0,105,0,0"/>
+        <PasswordBox HorizontalAlignment="Center" Margin="0,187,0,0" VerticalAlignment="Top" Width="250" Height="31" Background="#FF129FA7" FontFamily="Bradley Hand ITC" FontSize="24" SelectionTextBrush="{x:Null}" >
             <i:Interaction.Behaviors>
                 <Helpers:PasswordBoxBehavior/>
             </i:Interaction.Behaviors>
         </PasswordBox>
-        <Button Content="LOGIN" HorizontalAlignment="Left" Margin="139,339,0,0" VerticalAlignment="Top" Height="40" Width="198" Background="#FF7ED957" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding Login}"/>
-        <Button Content="REGISTER" HorizontalAlignment="Left" Margin="375,339,0,0" VerticalAlignment="Top" Height="40" Width="198" Background="#FF7ED957" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding CreateAccount}"/>
+        <Button Content="LOGIN" HorizontalAlignment="Center" Margin="0,247,0,0" VerticalAlignment="Top" Height="40" Width="198" Background="#FF7ED957" BorderBrush="{x:Null}" FontFamily="Bradley Hand ITC" FontSize="24" Command="{Binding Login}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="262,84,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="110" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="262,158,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="110" FontSize="18"/>
 
 
     </Grid>

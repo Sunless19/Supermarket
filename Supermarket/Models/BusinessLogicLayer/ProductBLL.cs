@@ -68,6 +68,7 @@ namespace Supermarket.Models.BusinessLogicLayer
                             product.SellingPrice = (decimal)reader[5];
                             product.ExpiryDate = (DateTime)reader[6];
                             product.Quantity = (int)reader[7];
+                            product.isDeleted = (bool)reader[8];
                             result.Add(product);
                         }
                     }

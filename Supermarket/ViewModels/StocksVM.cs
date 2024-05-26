@@ -64,7 +64,7 @@ namespace Supermarket.ViewModels
         {
             if (SelectedStock != null)
             {
-                Stock.isDeleted = true;
+                SelectedStock.isDeleted = true;
                 _stockBLL.DeleteStock(SelectedStock, NewValue);
                 ProductsToShow = _stockBLL.GetStocks();
             }

@@ -270,7 +270,7 @@ namespace Supermarket.ViewModels
             }
             IsProductSelected = true;
             filteredProducts = new ObservableCollection<Product>(filteredProducts.Where(p => p.Quantity != 0));
-
+            filteredProducts = new ObservableCollection<Product>(filteredProducts.Where(p => p.isDeleted != true));
             ProductsToShow = filteredProducts;
         }
         private void LoadProducts()
