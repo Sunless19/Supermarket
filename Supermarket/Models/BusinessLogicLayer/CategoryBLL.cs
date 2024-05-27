@@ -36,6 +36,7 @@ namespace Supermarket.Models.BusinessLogicLayer
                         category.CategoryId = (int)reader[0];
                         category.Name= reader.GetString(1);
                         category.isDeleted = (bool)reader[2];
+                        if(category.isDeleted==false)
                         result.Add(category);
                     }
                     reader.Close();

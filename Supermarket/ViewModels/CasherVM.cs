@@ -276,7 +276,9 @@ namespace Supermarket.ViewModels
         private void LoadProducts()
         {
             Products = _productBLL.GetAllProducts();
+            Products = new ObservableCollection<Product>(Products.Where(p => p.isDeleted != true));
             Products = _productBLL.GetStockProducts();
+            Products = new ObservableCollection<Product>(Products.Where(p => p.isDeleted != true));
         }
         private Product _selectedProduct;
         public Product SelectedProduct
